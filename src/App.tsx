@@ -10,7 +10,7 @@ import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute.tsx";
 import Article from "./pages/Article";
 import Store from "./pages/Store";
 import {useEffect, useState} from "react";
-import Logo from '../src/assets/imgs/left-logo.png';
+import Logo from '../src/assets/imgs/white-logo.png';
 import Notfound from "./pages/Notfound";
 import {ThemeProvider, useTheme} from "./context/ThemeContext.tsx";
 import Accounts from "./pages/Accounts";
@@ -50,8 +50,8 @@ function MainComponent() {
             {isMobile ? (
                 <div
                     className={` ${isDarkMode ? 'dark' : 'light'} fixed top-0 left-0 w-full h-full bg-gray-900 text-white flex flex-col items-center justify-center z-50`}>
-                    <img src={Logo} alt={'logo'}/>
-                    <div className="bg-gray-800 p-8 rounded-lg shadow-lg">
+                    <img className={'w-[300px]'} src={Logo} alt={'logo'}/>
+                    <div className="bg-gray-800 p-8 rounded-lg shadow-lg mt-4">
                         <h2 className="text-2xl font-bold mb-4 text-primary">
                             Xin lỗi, hệ thống không khả dụng cho thiết bị di động.
                         </h2>
