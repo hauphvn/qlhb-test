@@ -1,0 +1,21 @@
+.sticky-header-sha{
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 100;
+    backdrop-filter: blur(8px);
+    /* Đảm bảo header luôn hiển thị trên cùng */
+    /*box-shadow: 0 1px 3px rgba(0,0,0,0.1);*/
+}
+.table-container-accounts {
+    /*position: relative;*/
+    /*overflow-y: auto;*/
+    /*max-height: 600px;*/
+}
+.bottom-list-account-wrapper {
+    table thead tr{
+        /*border-bottom: 1px solid red!important;*/
+        /*padding-bottom: 3px;*/
+        /*z-index: 9999;*/
+    }
+}
