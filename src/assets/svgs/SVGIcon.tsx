@@ -438,6 +438,14 @@ const IconSelectArrowLarge = (props: { isActive?: boolean, isDarkMode?: boolean 
         </svg>
     );
 }
+const IconInputSearchSmall = () => {
+    return (
+        <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16.5 16.9999L11.7428 12.2427" stroke="#0D0C22" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M7.5 14C10.8137 14 13.5 11.3137 13.5 8C13.5 4.68629 10.8137 2 7.5 2C4.18629 2 1.5 4.68629 1.5 8C1.5 11.3137 4.18629 14 7.5 14Z" stroke="#0D0C22" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    );
+}
 const IconInputSearch = (props: { isActive?: boolean, isDarkMode?: boolean }) => {
     return (
         <svg
@@ -863,6 +871,7 @@ export {
     IconPlus,
     IconStoreMenu,
     IconInputSearch,
+    IconInputSearchSmall,
     IconLogout,
     IconCartMenu,
     IconArticleMenu,

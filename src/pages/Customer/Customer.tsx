@@ -1,7 +1,9 @@
 import Button from "../../components/Button";
-import {IconManageMenu, IconPlus} from "../../assets/svgs/SVGIcon.tsx";
+import {IconInputSearchSmall, IconManageMenu, IconPlus} from "../../assets/svgs/SVGIcon.tsx";
 import ButtonGradient from "../../components/ButtonGradient";
 import {useTheme} from "../../context/ThemeContext.tsx";
+import {Table, TableBody, TableFooter, TableHead, TableHeader, TableRow} from "../../components/ui/table.tsx";
+import {Input} from "../../components/ui/input.tsx";
 
 const Customer = () => {
     const {isDarkMode} = useTheme();
@@ -22,8 +24,58 @@ const Customer = () => {
                         name={'Thêm mới'}/>
                 </div>
             </div>
-            <div className={'flex justify-center items-center h-[calc(100vh-88px)]'}>
-                <div>Đang phát triển</div>
+            <div className={'w-full flex flex-col h-screen bg-backgroundContent '}>
+                <div className={'search-wrapper m-[32px] flex justify-end '}>
+                    <div className="input-search w-[275px] relative">
+                        <Input
+                            placeholder={'Tìm kiếm khách hàng'}
+                            className={'focus-visible:ring-transparent placeholder:text-gray-300 pr-8'}/>
+                        <div className={'absolute top-[30%] right-2 cursor-pointer'}
+                             onClick={() => alert('Đang phát triển')}
+                        >
+                            <IconInputSearchSmall/>
+                        </div>
+                    </div>
+                </div>
+                <div className={'bottom-list-customer-wrapper w-full '}>
+                    <div className="max-h-[60vh] table-wrapper border border-[#E7E7E9] rounded-[1.5rem]
+                    py-[1.719rem] mx-[2rem] flex flex-col mb-[15px] overflow-hidden bg-white ">
+                        <div
+                            className=" pb-[2.719rem] w-full justify-between frame_1000003562 flex items-center self-stretch">
+                            <div
+                                className="text-black font-['Inter'] pl-[1rem] text-2xl font-medium leading-[130%]">Danh
+                                sách khách hàng
+                            </div>
+
+                        </div>
+                        <div className={'overflow-auto'}>
+                            <Table>
+                                <TableHeader className="sticky top-0 z-10 bg-white">
+                                    <TableRow>
+                                        <TableHead>Họ</TableHead>
+                                        <TableHead>Tên</TableHead>
+                                        <TableHead>Điện thoại</TableHead>
+                                        <TableHead>Email</TableHead>
+                                        <TableHead>Ngày sinh</TableHead>
+                                        <TableHead>Địa chỉ</TableHead>
+                                        <TableHead>Doanh thu</TableHead>
+                                        <TableHead></TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody
+                                >
+
+                                </TableBody>
+                                <TableFooter>
+                                    {/*<TableRow>*/}
+                                    {/*    <TableCell colSpan={3}>Total</TableCell>*/}
+                                    {/*    <TableCell className="text-right">$2,500.00</TableCell>*/}
+                                    {/*</TableRow>*/}
+                                </TableFooter>
+                            </Table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );
