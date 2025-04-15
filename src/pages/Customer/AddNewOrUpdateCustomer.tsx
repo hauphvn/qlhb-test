@@ -40,7 +40,6 @@ import {
     UnitOptions,
     WarrantyOptions
 } from "../../constants/AppContants.ts";
-import {StoreOptions} from "./Customer.tsx";
 import {STORAGE_ITEM} from "../../constants/StorageItem.ts";
 import {useMutation} from "@tanstack/react-query";
 import Loading from "../../components/Loading/Loading.tsx";
@@ -1604,7 +1603,7 @@ interface AddNewOrUpdateProductProps {
     onCloseAddNew: (isReload: boolean) => void,
     onCloseUpdate: (isReload: boolean) => void,
     onSubmit?: () => void,
-    storeOptions: StoreOptions[],
+    storeOptions: [],
     productEdit: IProductDetails,
 
 }
