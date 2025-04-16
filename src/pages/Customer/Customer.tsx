@@ -2,11 +2,97 @@ import Button from "../../components/Button";
 import {IconInputSearchSmall, IconManageMenu, IconPlus} from "../../assets/svgs/SVGIcon.tsx";
 import ButtonGradient from "../../components/ButtonGradient";
 import {useTheme} from "../../context/ThemeContext.tsx";
-import {Table, TableBody, TableFooter, TableHead, TableHeader, TableRow} from "../../components/ui/table.tsx";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TableRow
+} from "../../components/ui/table.tsx";
 import {Input} from "../../components/ui/input.tsx";
+import {post} from "../../libs";
+import {API_PATH} from "../../constants/Path.ts";
+import {useInfiniteQuery} from "@tanstack/react-query";
+import {useEffect, useRef} from "react";
+import {useIntersection} from "@mantine/hooks";
+import {Skeleton} from "../../components/ui/skeleton.tsx";
+import {FormatBirthday} from "../../constants/ConvertCommon.ts";
 
+type Customer = {
+    Id: number;
+    CardTypeId: number | null;
+    CardNumber: string | null;
+    Title: string | null;
+    LastName: string | null;
+    FirstName: string | null;
+    PhoneNumber: string | null;
+    Address: string | null;
+    City: string | null;
+    StateCode: string | null;
+    CountryCode: string | null;
+    CountryName: string | null;
+    StateName: string | null;
+    DistrictName: string | null;
+    DistrictCode: string | null;
+    Email: string | null;
+    NationalId: string | null;
+    Birthday: string | null;
+    Account: string | null;
+    Password: string | null;
+    StoreId: number | null;
+    Status: "ACTIVE" | "LOCK" | string;
+    Gender: number | null;
+    Notes: string | null;
+    Image: string | null;
+    Revenue: number | null;
+}
+type ApiResponse = {
+    message: string;
+    metadata: {
+        TotalCount: number;
+        Items: Customer[];
+        PageNumber: number;
+        PageSize: number;
+        TotalPages: number;
+    };
+    statusCodes: number;
+};
 const Customer = () => {
     const {isDarkMode} = useTheme();
+    const fetchCustomers = async ({pageParam = 1}) => {
+        const requestBody = {
+            SearchText: '',
+            Status: '',
+            PageNumber: pageParam,
+            PageSize: 10
+        };
+        const res = await post(API_PATH.CUSTOMER.GET_ALL, requestBody);
+        return res.data as Promise<ApiResponse>;
+    }
+    const {data, fetchNextPage, isFetchingNextPage, hasNextPage} = useInfiniteQuery<ApiResponse>({
+        queryKey: ['customers'],
+        // @ts-ignore
+        queryFn: fetchCustomers,
+        getNextPageParam: (lastPage) => {
+            const {PageNumber, TotalPages} = lastPage.metadata;
+            return (PageNumber < TotalPages) ? PageNumber + 1 : undefined;
+        },
+        initialPageParam: 1
+    });
+    const lastCustomerRef = useRef<HTMLElement>(null);
+    const {ref, entry} = useIntersection({
+        root: lastCustomerRef.current,
+        threshold: 1
+    });
+    useEffect(() => {
+        if (entry?.isIntersecting && hasNextPage) {
+            fetchNextPage();
+        }
+    }, [entry, hasNextPage, fetchNextPage]);
+    // @ts-ignore
+    const customers = data?.pages.flatMap(page => page.metadata.Items) ?? [];
     return (
         <div>
             <div
@@ -38,10 +124,10 @@ const Customer = () => {
                     </div>
                 </div>
                 <div className={'bottom-list-customer-wrapper w-full '}>
-                    <div className="max-h-[60vh] table-wrapper border border-[#E7E7E9] rounded-[1.5rem]
+                    <div className="max-h-[80vh] table-wrapper border border-[#E7E7E9] rounded-[1.5rem]
                     py-[1.719rem] mx-[2rem] flex flex-col mb-[15px] overflow-hidden bg-white ">
                         <div
-                            className=" pb-[2.719rem] w-full justify-between frame_1000003562 flex items-center self-stretch">
+                            className=" pb-[2.719rem] w-full justify-between flex items-center self-stretch">
                             <div
                                 className="text-black font-['Inter'] pl-[1rem] text-2xl font-medium leading-[130%]">Danh
                                 sách khách hàng
@@ -57,14 +143,63 @@ const Customer = () => {
                                         <TableHead>Điện thoại</TableHead>
                                         <TableHead>Email</TableHead>
                                         <TableHead>Ngày sinh</TableHead>
-                                        <TableHead>Địa chỉ</TableHead>
+                                        <TableHead
+                                            className={'max-w-[200px]'}
+                                        >Địa chỉ</TableHead>
                                         <TableHead>Doanh thu</TableHead>
                                         <TableHead></TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody
                                 >
+                                    {customers.map((customer, i) => (
+                                        <TableRow
+                                            key={customer.Id}
+                                            ref={(i === customers.length - 1) ? ref : null}
+                                        >
+                                            <TableCell>
+                                                {customer.LastName || 'N/A'}
+                                            </TableCell>
+                                            <TableCell>
+                                                {customer.FirstName || 'N/A'}
+                                            </TableCell>
+                                            <TableCell>
+                                                {customer.PhoneNumber || 'N/A'}
+                                            </TableCell>
+                                            <TableCell>
+                                                {customer.Email || 'N/A'}
+                                            </TableCell>
+                                            <TableCell
+                                            >
+                                                {FormatBirthday(customer.Birthday) || 'N/A'}
+                                            </TableCell>
+                                            <TableCell
+                                                title={customer.Address}
+                                                className={'truncate max-w-[150px]'}
+                                            >
+                                                {customer.Address || 'N/A'}
 
+                                            </TableCell>
+                                            <TableCell>
+                                                {customer.Revenue || 'N/A'}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                    {isFetchingNextPage && (
+                                        <TableRow>
+                                            <TableCell colSpan={5}>
+                                                <div className="flex items-center space-x-4 p-4">
+                                                    <Skeleton className="h-4 w-[50px]"/>
+                                                    <Skeleton className="h-4 w-[200px]"/>
+                                                    <Skeleton className="h-4 w-[200px]"/>
+                                                    <Skeleton className="h-4 w-[150px]"/>
+                                                    <Skeleton className="h-4 w-[100px]"/>
+                                                    <Skeleton className="h-4 w-[100px]"/>
+                                                    <Skeleton className="h-4 w-[100px]"/>
+                                                </div>
+                                            </TableCell>
+                                        </TableRow>
+                                    )}
                                 </TableBody>
                                 <TableFooter>
                                     {/*<TableRow>*/}

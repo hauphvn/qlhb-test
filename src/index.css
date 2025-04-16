@@ -166,7 +166,7 @@ table{
 /* Add this to your CSS file */
 * {
     scrollbar-width: thin; /* For Firefox */
-    scrollbar-color: var(--color-accent01) #EBEBEF; /* For Firefox */
+    scrollbar-color: var(--color-brand01) #EBEBEF; /* For Firefox */
 }
 
 /* For WebKit browsers */
@@ -175,7 +175,7 @@ table{
 }
 
 *::-webkit-scrollbar-thumb {
-    background-color: var(--color-accent01);
+    background-color: var(--color-brand01);
     border-radius: 6px;
 }
 
