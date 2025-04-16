@@ -18,7 +18,11 @@ import {useInfiniteQuery} from "@tanstack/react-query";
 import {useEffect, useRef, useState} from "react";
 import {useIntersection} from "@mantine/hooks";
 import {Skeleton} from "../../components/ui/skeleton.tsx";
-import {FormatBirthday} from "../../constants/ConvertCommon.ts";
+import {FormatBirthday, FormatCurrency} from "../../constants/ConvertCommon.ts";
+import AddNewOrUpdateCustomer from "./AddNewOrUpdateCustomer.tsx";
+import {ICustomerDetail} from "../../types";
+import {useAtom} from "jotai/index";
+import {quocGiaAtom} from "../../store/atom/commonAtom.ts";
 
 type Customer = {
     Id: number;
@@ -59,8 +63,37 @@ type ApiResponse = {
     };
     statusCodes: number;
 };
+const customerEdit: ICustomerDetail = {
+    Id: 0,
+    CardTypeId: null,
+    CardNumber: null,
+    Title: null,
+    LastName: '',
+    FirstName: '',
+    PhoneNumber: '',
+    Address: '',
+    City: '',
+    StateCode: '',
+    CountryCode: '',
+    CountryName: '',
+    StateName: '',
+    DistrictName: '',
+    DistrictCode: '',
+    Email: '',
+    NationalId: null,
+    Birthday: '',
+    Account: null,
+    Password: null,
+    StoreId: null,
+    Status: 'INACTIVE',
+    Gender: 0,
+    Notes: null,
+    Image: '',
+}
 const Customer = () => {
     const {isDarkMode} = useTheme();
+    const [showAddNew, setShowAddNew] = useState(false);
+    const [showEdit, setShowEdit] = useState(false);
     const [searchText, setSearchText] = useState('');
     const [debouncedSearchText, setDebouncedSearchText] = useState('');
     const fetchCustomers = async ({pageParam = 1, searchText = ''}) => {
@@ -83,6 +116,9 @@ const Customer = () => {
         },
         initialPageParam: 1
     });
+    const [{
+        data: nationalities,
+    }] = useAtom(quocGiaAtom);
     const lastCustomerRef = useRef<HTMLElement>(null);
     const {ref, entry} = useIntersection({
         root: lastCustomerRef.current,
@@ -92,7 +128,7 @@ const Customer = () => {
     useEffect(() => {
         const timer = setTimeout(() => {
             setDebouncedSearchText(searchText);
-        },500);
+        }, 500);
         return () => {
             clearTimeout(timer);
         };
@@ -102,10 +138,16 @@ const Customer = () => {
             fetchNextPage();
         }
     }, [entry, hasNextPage, fetchNextPage]);
-    const handleKeyDown = (event:React.KeyboardEvent<HTMLInputElement>) => {
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
             setDebouncedSearchText(searchText);
         }
+    }
+    const onCloseAddNew = () => {
+        setShowAddNew(false);
+    }
+    const onCloseUpdate = () => {
+        setShowEdit(false);
     }
     // @ts-ignore
     const customers = data?.pages.flatMap(page => page.metadata.Items) ?? [];
@@ -120,7 +162,7 @@ const Customer = () => {
                         className={`${isDarkMode ? 'bg-[#f9f9fb] border-[#e7e7e9] text-neutrals-400' : ''} h-[40px]`}
                         name={'Nhập theo danh sách'}/>
                     <ButtonGradient
-                        onClick={() => null}
+                        onClick={() => setShowAddNew(true)}
                         icon={<IconPlus/>}
                         className={`${isDarkMode ? 'border-darkGrey-3838-important border' : ''} h-[40px] w-[165px] text-[16px]  px-[24px] gap-x-[14px]`}
                         name={'Thêm mới'}/>
@@ -200,7 +242,7 @@ const Customer = () => {
 
                                             </TableCell>
                                             <TableCell>
-                                                {customer.Revenue || 'N/A'}
+                                                {FormatCurrency((customer?.Revenue) ? customer?.Revenue + '' : '0')}
                                             </TableCell>
                                         </TableRow>
                                     ))}
@@ -231,6 +273,13 @@ const Customer = () => {
                     </div>
                 </div>
             </div>
+            <AddNewOrUpdateCustomer showAddNew={showAddNew}
+                                    showEditCustomer={showEdit}
+                                    onCloseAddNew={onCloseAddNew}
+                                    onCloseUpdate={onCloseUpdate}
+                                    customerEdit={customerEdit}
+                                    nationalities={nationalities}
+            />
         </div>
     );
 };

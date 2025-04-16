@@ -137,7 +137,7 @@ table{
 }
 
 .switch-root-medium input:checked + .slider {
-    background-color: var(--color-semantics-green02);
+    background-color: var(--color-brand01);
 }
 
 .switch-root-medium input:focus + .slider {

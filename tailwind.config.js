@@ -23,6 +23,15 @@ export default {
                     '200': '#3FC0F1',
                     DEFAULT: '#16A8E1'
                 },
+                brand01Tint40: {
+                    DEFAULT: '#E1F3FD'
+                },
+                brand01Tint30: {
+                    DEFAULT: '#BDE7FA'
+                },
+                brand01Shade40: {
+                    DEFAULT: '#104C6A'
+                },
                 brand02: {
                     DEFAULT: '#DB8C23'
                 },

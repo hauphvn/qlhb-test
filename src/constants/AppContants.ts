@@ -29,3 +29,11 @@ export const FolderImageOnFtp = {
     Products: 'products',
 }
 
+// Danh xưng: Ông, Bà, Anh, Chị
+export const GenderOptions = [
+    { value: 'Ông', label: 'Ông' },
+    { value: 'Bà', label: 'Bà' },
+    { value: 'Anh', label: 'Anh' },
+    { value: 'Chị', label: 'Chị' },
+]
+

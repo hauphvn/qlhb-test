@@ -16,7 +16,7 @@ export const infoLocationApi = {
             "loai": 'quocgia'
         });
         // Sort to 'VN' is first
-        const sortCountry = country.data?.content.sort((a: Nationality, b: Nationality) => {
+        const sortCountry = country.data?.metadata.sort((a: Nationality, b: Nationality) => {
             if (a.CountryCode === 'VN') return -1;
             if (b.CountryCode === 'VN') return 1;
             return 0;
@@ -29,7 +29,7 @@ export const infoLocationApi = {
             "loai": 'bang',
             "CountryCode": countryCode
         });
-        return res.data?.content || [];
+        return res.data?.metadata || [];
     },
     getDistrict: async (province: string | undefined, country: string | undefined) => {
         if (!province || !country) return [];
@@ -39,7 +39,7 @@ export const infoLocationApi = {
             "StateCode": province
         });
         // Convert to array District
-        const districts: District[] = res.data?.content?.map((item: any) => {
+        const districts: District[] = res.data?.metadata?.map((item: any) => {
             return {
                 DistrictCode: item.CityName,
                 DistrictName: convertProvinceDistrict(item.CityName),
@@ -59,7 +59,7 @@ export const infoLocationApi = {
             "CountryCode": country,
             "StateCode": province
         });
-        const districtFilter: any = res.data?.content?.map((item: any) => {
+        const districtFilter: any = res.data?.metadata?.map((item: any) => {
             return {
                 DistrictCode: item.CityName,
                 WardCode: item.CityName2 ? item.CityName2 : item.CityName3,

@@ -76,6 +76,34 @@ export interface INewProductRequest {
     type5?: string;
 }
 
+export interface ICustomerDetail {
+    Id: number;
+    CardTypeId: number | null;
+    CardNumber: string | null;
+    Title: string | null;
+    LastName: string;
+    FirstName: string;
+    PhoneNumber: string;
+    Address: string;
+    City: string;
+    StateCode: string;
+    CountryCode: string;
+    CountryName: string;
+    StateName: string;
+    DistrictName: string;
+    DistrictCode: string;
+    Email: string;
+    NationalId: string | null;
+    Birthday: string;
+    Account: string | null;
+    Password: string | null;
+    StoreId: number | null;
+    Status: "ACTIVE" | "LOCK" | string;
+    Gender: number;
+    Notes: string | null;
+    Image: string;
+}
+
 export interface IProductUpdateRequest {
     masanpham: string;
     tensanpham: string;
@@ -324,3 +352,5 @@ export interface AddressState {
     phuongXa: Ward | null;
     diaChi: string | null;
 }
+
+

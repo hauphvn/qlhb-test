@@ -66,9 +66,9 @@ export const API_PATH = {
         UPDATE_METADATA_PRODUCT_IMAGE: '/ProductImage/Metadata/Update',
     },
     GEOGRAPHICAL_INFORMATION: {
-        COUNTRY: '/Common/GetThongTinDiaChinh',
-        PROVINCE: '/Common/GetThongTinDiaChinh',
-        DISTRICT: '/Common/GetThongTinDiaChinh',
-        WARD: '/Common/GetThongTinDiaChinh',
+        COUNTRY: '/Common/GetInfoAddress',
+        PROVINCE: '/Common/GetInfoAddress',
+        DISTRICT: '/Common/GetInfoAddress',
+        WARD: '/Common/GetInfoAddress',
     },
 }

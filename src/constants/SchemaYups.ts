@@ -11,7 +11,7 @@ export const formLoginSchema = () => {
 }
 export const formAddEditStore = () => {
     return yup.object().shape({
-       storeCode: stringRequired,
+        storeCode: stringRequired,
         storeName: stringRequired,
         storeRepresentative: stringRequired,
         storeLevel: stringRequired,
@@ -26,6 +26,37 @@ export const formAddEditStore = () => {
         email: stringNormal,
         URLImage: stringNormal,
     })
+}
+export const formAddEditCustomer = () => {
+    return yup.object().shape({
+        title: stringNormal,
+        firstName: stringRequired,
+        lastName: stringNormal,
+        phoneNumber: stringNormal,
+        email: stringNormal,
+        gender: stringNormal,
+        dateOfBirth: stringNormal,
+        national: stringRequired,
+        province: stringRequired,
+        district: stringNormal,
+        ward: stringNormal,
+        address: stringNormal,
+    });
+}
+export const formAddEditCustomerDefault = {
+     // Generate all fields with default values
+    title: '',
+    firstName: '',
+    lastName: '',
+    phoneNumber: '',
+    email: '',
+    gender: '',
+    dateOfBirth: '',
+    national: '',
+    province: '',
+    district: '',
+    ward: '',
+    address: '',
 }
 export const formAddEditProduct = () => {
     return yup.object().shape({
