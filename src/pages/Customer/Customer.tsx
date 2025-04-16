@@ -124,7 +124,7 @@ const Customer = () => {
                     </div>
                 </div>
                 <div className={'bottom-list-customer-wrapper w-full '}>
-                    <div className="max-h-[80vh] table-wrapper border border-[#E7E7E9] rounded-[1.5rem]
+                    <div className="max-h-[70vh] table-wrapper border border-[#E7E7E9] rounded-[1.5rem]
                     py-[1.719rem] mx-[2rem] flex flex-col mb-[15px] overflow-hidden bg-white ">
                         <div
                             className=" pb-[2.719rem] w-full justify-between flex items-center self-stretch">
