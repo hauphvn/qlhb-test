@@ -15,7 +15,7 @@ import {Input} from "../../components/ui/input.tsx";
 import {post} from "../../libs";
 import {API_PATH} from "../../constants/Path.ts";
 import {useInfiniteQuery} from "@tanstack/react-query";
-import {useEffect, useRef} from "react";
+import {useEffect, useRef, useState} from "react";
 import {useIntersection} from "@mantine/hooks";
 import {Skeleton} from "../../components/ui/skeleton.tsx";
 import {FormatBirthday} from "../../constants/ConvertCommon.ts";
@@ -61,9 +61,11 @@ type ApiResponse = {
 };
 const Customer = () => {
     const {isDarkMode} = useTheme();
-    const fetchCustomers = async ({pageParam = 1}) => {
+    const [searchText, setSearchText] = useState('');
+    const [debouncedSearchText, setDebouncedSearchText] = useState('');
+    const fetchCustomers = async ({pageParam = 1, searchText = ''}) => {
         const requestBody = {
-            SearchText: '',
+            SearchText: searchText,
             Status: '',
             PageNumber: pageParam,
             PageSize: 10
@@ -72,9 +74,9 @@ const Customer = () => {
         return res.data as Promise<ApiResponse>;
     }
     const {data, fetchNextPage, isFetchingNextPage, hasNextPage} = useInfiniteQuery<ApiResponse>({
-        queryKey: ['customers'],
+        queryKey: ['customers', debouncedSearchText],
         // @ts-ignore
-        queryFn: fetchCustomers,
+        queryFn: ({pageParam}) => fetchCustomers({pageParam, searchText: debouncedSearchText}),
         getNextPageParam: (lastPage) => {
             const {PageNumber, TotalPages} = lastPage.metadata;
             return (PageNumber < TotalPages) ? PageNumber + 1 : undefined;
@@ -86,11 +88,25 @@ const Customer = () => {
         root: lastCustomerRef.current,
         threshold: 1
     });
+    // Debounced search text input
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearchText(searchText);
+        },500);
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [searchText]);
     useEffect(() => {
         if (entry?.isIntersecting && hasNextPage) {
             fetchNextPage();
         }
     }, [entry, hasNextPage, fetchNextPage]);
+    const handleKeyDown = (event:React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            setDebouncedSearchText(searchText);
+        }
+    }
     // @ts-ignore
     const customers = data?.pages.flatMap(page => page.metadata.Items) ?? [];
     return (
@@ -114,6 +130,9 @@ const Customer = () => {
                 <div className={'search-wrapper m-[32px] flex justify-end '}>
                     <div className="input-search w-[275px] relative">
                         <Input
+                            onKeyDown={handleKeyDown}
+                            value={searchText}
+                            onChange={(e) => setSearchText(e.target.value)}
                             placeholder={'Tìm kiếm khách hàng'}
                             className={'focus-visible:ring-transparent placeholder:text-gray-300 pr-8'}/>
                         <div className={'absolute top-[30%] right-2 cursor-pointer'}
@@ -171,10 +190,10 @@ const Customer = () => {
                                             </TableCell>
                                             <TableCell
                                             >
-                                                {FormatBirthday(customer.Birthday) || 'N/A'}
+                                                {FormatBirthday(customer.Birthday ?? '') || 'N/A'}
                                             </TableCell>
                                             <TableCell
-                                                title={customer.Address}
+                                                title={customer.Address ?? ''}
                                                 className={'truncate max-w-[150px]'}
                                             >
                                                 {customer.Address || 'N/A'}
@@ -190,12 +209,12 @@ const Customer = () => {
                                             <TableCell colSpan={5}>
                                                 <div className="flex items-center space-x-4 p-4">
                                                     <Skeleton className="h-4 w-[50px]"/>
-                                                    <Skeleton className="h-4 w-[200px]"/>
-                                                    <Skeleton className="h-4 w-[200px]"/>
+                                                    <Skeleton className="h-4 w-[50px]"/>
+                                                    <Skeleton className="h-4 w-[50px]"/>
                                                     <Skeleton className="h-4 w-[150px]"/>
-                                                    <Skeleton className="h-4 w-[100px]"/>
-                                                    <Skeleton className="h-4 w-[100px]"/>
-                                                    <Skeleton className="h-4 w-[100px]"/>
+                                                    <Skeleton className="h-4 w-[50px]"/>
+                                                    <Skeleton className="h-4 w-[50px]"/>
+                                                    <Skeleton className="h-4 w-[50px]"/>
                                                 </div>
                                             </TableCell>
                                         </TableRow>
